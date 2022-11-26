@@ -170,7 +170,7 @@ int neighborhood_search(vector<Object> &objects, vector<Knapsack> &knapsacks,
       }
     }
 
-    if (result <= maxn_neighbor_result) {
+    if (result < maxn_neighbor_result) {
       result = maxn_neighbor_result;
     } else {
       break;
@@ -211,7 +211,7 @@ int main() {
 
   vector<bool> flag(objects.size(), false);
   int result = neighborhood_search(objects, knapsacks, flag);
-  std::cout << "Result: " << result << std::endl;
+  std::cout << result << std::endl;
 
   return 0;
 }

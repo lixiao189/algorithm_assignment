@@ -248,7 +248,7 @@ int main() {
 
   vector<bool> flag(objects.size(), false);
   int result = tabu_search(objects, knapsacks, flag);
-  std::cout << "Result: " << result << std::endl;
+  std::cout << result << std::endl;
 
   return 0;
 }
