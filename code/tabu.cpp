@@ -128,7 +128,9 @@ int tabu_search(vector<Object> &objects, vector<Knapsack> &knapsacks,
         // Find appropriate object in knapsacks to throw out and put the object
         for (auto &knapsack : knapsacks) {
           for (auto &object : knapsack.objects) {
-            if (object.index != objects[i].index && object.w >= objects[i].w) {
+            auto k_rest = knapsack.capacity - knapsack.cost;
+            if (object.index != objects[i].index &&
+                object.w + k_rest >= objects[i].w) {
               auto neighbor = solution;
               neighbor[object.index] = -1;
               neighbor[objects[i].index] = knapsack.index;
@@ -145,7 +147,8 @@ int tabu_search(vector<Object> &objects, vector<Knapsack> &knapsacks,
             for (auto kj = 0; kj < knapsacks.size(); kj++) {
               auto ki_rest = knapsacks[ki].capacity - knapsacks[ki].cost;
               auto kj_rest = knapsacks[kj].capacity - knapsacks[kj].cost;
-              if (object1.w <= kj_rest && objects[i].w <= ki_rest + object1.w) {
+              if (object1.w <= kj_rest && objects[i].w <= ki_rest + object1.w &&
+                  ki != kj) {
                 auto neighbor = solution;
                 neighbor[objects[i].index] = knapsacks[ki].index;
                 neighbor[object1.index] = knapsacks[kj].index;
@@ -155,7 +158,7 @@ int tabu_search(vector<Object> &objects, vector<Knapsack> &knapsacks,
               } else {
                 for (auto &object2 : knapsacks[kj].objects) { // Throw object2
                   if (object1.w <= kj_rest + object2.w &&
-                      objects[i].w <= ki_rest + object1.w) {
+                      objects[i].w <= ki_rest + object1.w && ki != kj) {
                     auto neighbor = solution;
                     neighbor[objects[i].index] = knapsacks[ki].index;
                     neighbor[object1.index] = knapsacks[kj].index;
@@ -214,6 +217,12 @@ int tabu_search(vector<Object> &objects, vector<Knapsack> &knapsacks,
           knapsack.objects.push_back(objects[i]);
           knapsack.cost += objects[i].w;
         }
+      }
+
+      if (knapsack.cost > knapsack.capacity) {
+        std::cout << "Error!" << std::endl;
+        output_knapsacks(knapsacks);
+        return -1;
       }
     }
   }

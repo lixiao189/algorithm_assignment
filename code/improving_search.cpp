@@ -134,7 +134,8 @@ int neighborhood_search(vector<Object> &objects, vector<Knapsack> &knapsacks,
             for (auto kj = 0; kj < knapsacks.size(); kj++) {
               auto ki_rest = knapsacks[ki].capacity - knapsacks[ki].cost;
               auto kj_rest = knapsacks[kj].capacity - knapsacks[kj].cost;
-              if (object1.w <= kj_rest && objects[i].w <= ki_rest + object1.w) {
+              if (object1.w <= kj_rest && objects[i].w <= ki_rest + object1.w &&
+                  kj != ki) {
                 auto neighbor = solution;
                 neighbor[objects[i].index] = knapsacks[ki].index;
                 neighbor[object1.index] = knapsacks[kj].index;
@@ -143,7 +144,7 @@ int neighborhood_search(vector<Object> &objects, vector<Knapsack> &knapsacks,
                 for (auto &object2 : knapsacks[kj].objects) { // Throw object2
                   if (object1.w <= kj_rest + object2.w &&
                       objects[i].w <= ki_rest + object1.w &&
-                      object2.p < objects[i].p) {
+                      object2.p < objects[i].p && ki != kj) {
                     auto neighbor = solution;
                     neighbor[objects[i].index] = knapsacks[ki].index;
                     neighbor[object1.index] = knapsacks[kj].index;
