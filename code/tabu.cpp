@@ -93,8 +93,8 @@ int greedy(vector<Object> &objects, vector<Knapsack> &knapsacks,
   return result;
 }
 
-int neighborhood_search(vector<Object> &objects, vector<Knapsack> &knapsacks,
-                        vector<bool> &flag) {
+int tabu_search(vector<Object> &objects, vector<Knapsack> &knapsacks,
+                vector<bool> &flag) {
   auto result = greedy(objects, knapsacks, flag);
 
   // Using vector to store the solution
@@ -124,6 +124,7 @@ int neighborhood_search(vector<Object> &objects, vector<Knapsack> &knapsacks,
             }
           }
         }
+
         // Find appropriate object in knapsacks to throw out and put the object
         for (auto &knapsack : knapsacks) {
           for (auto &object : knapsack.objects) {
@@ -137,13 +138,21 @@ int neighborhood_search(vector<Object> &objects, vector<Knapsack> &knapsacks,
             }
           }
         }
+
         // Rotate
         for (auto ki = 0; ki < knapsacks.size(); ki++) {
-          for (auto kj = 0; kj < knapsacks.size(); kj++) {
-            auto ki_rest = knapsacks[ki].capacity - knapsacks[ki].cost;
-            auto kj_rest = knapsacks[kj].capacity - knapsacks[kj].cost;
-            if (ki != kj) {
-              for (auto &object1 : knapsacks[ki].objects) {
+          for (auto &object1 : knapsacks[ki].objects) {
+            for (auto kj = 0; kj < knapsacks.size(); kj++) {
+              auto ki_rest = knapsacks[ki].capacity - knapsacks[ki].cost;
+              auto kj_rest = knapsacks[kj].capacity - knapsacks[kj].cost;
+              if (object1.w <= kj_rest && objects[i].w <= ki_rest + object1.w) {
+                auto neighbor = solution;
+                neighbor[objects[i].index] = knapsacks[ki].index;
+                neighbor[object1.index] = knapsacks[kj].index;
+                if (!in(tabu_list, neighbor)) {
+                  neighbors.push_back(neighbor);
+                }
+              } else {
                 for (auto &object2 : knapsacks[kj].objects) { // Throw object2
                   if (object1.w <= kj_rest + object2.w &&
                       objects[i].w <= ki_rest + object1.w) {
@@ -229,7 +238,7 @@ int main() {
   }
 
   vector<bool> flag(objects.size(), false);
-  int result = neighborhood_search(objects, knapsacks, flag);
+  int result = tabu_search(objects, knapsacks, flag);
   std::cout << "Result: " << result << std::endl;
 
   return 0;

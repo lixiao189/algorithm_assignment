@@ -1,2 +1,2 @@
-g++ improving_search.cpp -std=c++14 -o prog
-./prog < ./data/data3
+g++ tabu.cpp -std=c++14 -o prog
+./prog < ./data/data4
