@@ -42,7 +42,7 @@ for i in range(100):
 
     if (result1 < result2 and result2 < result3):
         print(result1, result2, result3)
-        print("-------------")
+        break
     if (result1 > result2 or result2 > result3 or result1 > result3):
         print("Wrong Answer")
         break

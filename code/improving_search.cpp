@@ -187,6 +187,12 @@ int neighborhood_search(vector<Object> &objects, vector<Knapsack> &knapsacks,
           knapsack.cost += objects[i].w;
         }
       }
+
+      if (knapsack.cost > knapsack.capacity) {
+        std::cout << "Error!" << std::endl;
+        output_knapsacks(knapsacks);
+        return -1;
+      }
     }
   }
 

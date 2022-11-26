@@ -12,7 +12,7 @@ bool cmp_object(Object a, Object b) {
   return (double)a.p / (double)a.w > (double)b.p / (double)b.w;
 }
 
-int neighborhood_search(int n, int m, Object *objects, int *W) {
+int greedy(int n, int m, Object *objects, int *W) {
   std::sort(objects, objects + n, cmp_object);
 
   bool x[N];
@@ -52,7 +52,7 @@ int main() {
     std::cin >> W[i];
   }
 
-  int result = neighborhood_search(n, m, objects, W);
+  int result = greedy(n, m, objects, W);
   std::cout << result << std::endl;
 
   return 0;
